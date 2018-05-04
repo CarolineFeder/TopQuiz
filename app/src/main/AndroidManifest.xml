@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Controleur.GameActivity"></activity>
+        <activity android:name=".Controleur.GameActivity" />
+        <activity android:name=".Controleur.HistoryActivity"></activity>
     </application>
 
 </manifest>

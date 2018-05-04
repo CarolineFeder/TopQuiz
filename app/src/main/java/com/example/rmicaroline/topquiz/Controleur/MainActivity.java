@@ -15,6 +15,9 @@ import android.widget.Toast;
 import com.example.rmicaroline.topquiz.Model.User;
 import com.example.rmicaroline.topquiz.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.lang.System.out;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,11 +27,16 @@ public class MainActivity extends AppCompatActivity {
     private TextView mGreetingText;
     private EditText mNameInput;
     private Button mPlayButton;
+    private Button mHistoryButton;
     private User mUser;
     private static final int GAME_ACTIVITY_REQUEST_CODE = 42;
     private SharedPreferences mPreferences;
     public static final String KEY_SCORE = "KEY_SCORE";
     public static final String KEY_FIRSTNAME = "KEY_FIRSTNAME";
+    public static final String KEY_SCORE_HIST = "KEY_SCORE_HIST";
+    public static final String KEY_FIRSTNAME_HIST = "KEY_FIRSTNAME_HIST";
+    public ArrayList<Integer> mListScore;
+    public ArrayList<String> mListFirstname;
 
 
     @Override
@@ -43,10 +51,16 @@ public class MainActivity extends AppCompatActivity {
         mGreetingText = (TextView) findViewById(R.id.activity_main_greeting_txt);
         mNameInput = (EditText) findViewById(R.id.activity_main_name_input);
         mPlayButton = (Button) findViewById(R.id.activity_main_play_btn);
+        mHistoryButton = (Button) findViewById(R.id.activity_main_hist_btn);
+
 
         mPlayButton.setEnabled(false);
 
+        mUser = new User();
+
         greetUser();
+
+
 
 
         mNameInput.addTextChangedListener(new TextWatcher() {
@@ -70,14 +84,27 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         // The user just clicked
-                        mUser = new User();
+
                         mUser.setFirstName(mNameInput.getText().toString());
+
                         //Ecriture prenom dans préférences
                         mPreferences.edit().putString(KEY_FIRSTNAME,mUser.getFirstName()).apply();
 
                         // def de l'intent et ouverture nouvelle activité GAME ACTIVITY
                         Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
                         startActivityForResult(gameActivity, GAME_ACTIVITY_REQUEST_CODE);
+                    }
+                });
+
+                mHistoryButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent historyActivity = new Intent (MainActivity.this, HistoryActivity.class);
+                        if (mListFirstname.size()>=1 && mListScore.size()>=1) {
+                            historyActivity.putExtra(KEY_SCORE_HIST, mListScore);
+                            historyActivity.putExtra(KEY_FIRSTNAME_HIST, mListFirstname);
+                            startActivity(historyActivity);
+                        }
                     }
                 });
     }
@@ -97,6 +124,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
     protected void greetUser (){
 
         //Lecture prénom dans préférences
@@ -108,14 +137,19 @@ public class MainActivity extends AppCompatActivity {
 
             // Mise à jour du texte d'acceuil si utilisateur est déjà connu
             String fullText = "Welcome back " + firstname
-                            + "\n your last score was " + score
-                            + "\n Will you do better this time? ";
+                            + "\nYour last score was " + score
+                            + "\nWill you do better this time? ";
             mGreetingText.setText(fullText);
 
             //Mise à jour du prénom dans le champ édit
             mNameInput.setText(firstname);
             mNameInput.setSelection(firstname.length());
             mPlayButton.setEnabled(true);
+
+
+            mListScore.add(score);
+            mListFirstname.add(firstname);
+
         }
 
 

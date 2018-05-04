@@ -52,7 +52,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             mNumberOfQuestions = savedInstanceState.getInt(BUNDLE_STATE_QUESTION);
         } else {
             mScore = 0;
-            mNumberOfQuestions = 3;
+            mNumberOfQuestions = 4;
         }
 
         mQuestionText = (TextView) findViewById(R.id.activity_game_question_text);
@@ -127,11 +127,37 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         "Mexico"),
                 1);
 
+        Question question6 = new Question ("Who was the first president of the USA?",
+                Arrays.asList("James Madison",
+                        "Andrew Johnson",
+                        "John Adams",
+                        "George Washington"),
+                3);
+
+        Question question7 = new Question ("What was the name of AC / DC s lead singer who died in 1980?",
+                Arrays.asList("Bon Scott",
+                        "Bryan Johnson",
+                        "Malcolm Young",
+                        "Mick Jagger"),
+                3);
+
+        Question question8 = new Question ("What is the biggest oil company in the United States?",
+                Arrays.asList("BP",
+                        "TOTAL",
+                        "EXXON MOBIL",
+                        "PETROBRAS"),
+                2);
+
+
+
         return new QuestionBank(Arrays.asList(question1,
                 question2,
                 question3,
                 question4,
-                question5));
+                question5,
+                question6,
+                question7,
+                question8));
 
     }
 
